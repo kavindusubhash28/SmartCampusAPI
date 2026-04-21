@@ -8,7 +8,7 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 
 public class SmartCampusApi {
 
-    public static final String BASE_URI = "http://localhost:8080/api/v1/";
+    public static final String BASE_URI = "http://localhost:8081/api/v1/";
 
     public static HttpServer startServer() {
         final ResourceConfig config = new ResourceConfig()
