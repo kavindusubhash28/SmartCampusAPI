@@ -44,9 +44,7 @@ public class SensorReadingResource {
         }
 
         if ("MAINTENANCE".equalsIgnoreCase(sensor.getStatus())) {
-            return Response.status(Response.Status.FORBIDDEN)
-                    .entity("Sensor is in maintenance and cannot accept readings")
-                    .build();
+            throw new SensorUnavailableException("Sensor is in maintenance mode and cannot accept new readings.");
         }
 
         if (reading == null) {

@@ -72,9 +72,7 @@ public class RoomResource {
         }
 
         if (room.getSensorIds() != null && !room.getSensorIds().isEmpty()) {
-            return Response.status(Response.Status.CONFLICT)
-                    .entity("Room has sensors, cannot delete")
-                    .build();
+            throw new RoomNotEmptyException("Room cannot be deleted because it still has assigned sensors.");
         }
 
         DataStore.rooms.remove(roomId);
