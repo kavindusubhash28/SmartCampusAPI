@@ -9,6 +9,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Path("/rooms")
@@ -25,18 +26,18 @@ public class RoomResource {
     public Response createRoom(Room room) {
         if (room == null || room.getId() == null || room.getId().isBlank()) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Room id is required")
+                    .entity(new ErrorResponse(400, "Bad Request", "Room id is required"))
                     .build();
         }
 
         if (DataStore.rooms.containsKey(room.getId())) {
             return Response.status(Response.Status.CONFLICT)
-                    .entity("Room with this id already exists")
+                    .entity(new ErrorResponse(409, "Conflict", "Room with this id already exists"))
                     .build();
         }
 
         if (room.getSensorIds() == null) {
-            room.setSensorIds(new java.util.ArrayList<>());
+            room.setSensorIds(new ArrayList<>());
         }
 
         DataStore.rooms.put(room.getId(), room);
@@ -53,7 +54,7 @@ public class RoomResource {
 
         if (room == null) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Room not found")
+                    .entity(new ErrorResponse(404, "Not Found", "Room not found"))
                     .build();
         }
 
@@ -67,7 +68,7 @@ public class RoomResource {
 
         if (room == null) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Room not found")
+                    .entity(new ErrorResponse(404, "Not Found", "Room not found"))
                     .build();
         }
 
@@ -76,7 +77,6 @@ public class RoomResource {
         }
 
         DataStore.rooms.remove(roomId);
-
-        return Response.ok("Room deleted").build();
+        return Response.ok(new MessageResponse("Room deleted")).build();
     }
 }

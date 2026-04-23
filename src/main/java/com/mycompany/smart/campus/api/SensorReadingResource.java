@@ -21,7 +21,7 @@ public class SensorReadingResource {
 
         if (sensor == null) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Sensor not found")
+                    .entity(new ErrorResponse(404, "Not Found", "Sensor not found"))
                     .build();
         }
 
@@ -39,7 +39,7 @@ public class SensorReadingResource {
 
         if (sensor == null) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Sensor not found")
+                    .entity(new ErrorResponse(404, "Not Found", "Sensor not found"))
                     .build();
         }
 
@@ -49,7 +49,7 @@ public class SensorReadingResource {
 
         if (reading == null) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Reading body is required")
+                    .entity(new ErrorResponse(400, "Bad Request", "Reading body is required"))
                     .build();
         }
 

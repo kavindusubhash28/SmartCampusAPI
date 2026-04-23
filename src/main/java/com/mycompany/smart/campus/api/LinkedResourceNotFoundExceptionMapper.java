@@ -10,15 +10,9 @@ public class LinkedResourceNotFoundExceptionMapper implements ExceptionMapper<Li
 
     @Override
     public Response toResponse(LinkedResourceNotFoundException ex) {
-        ErrorResponse error = new ErrorResponse(
-                422,
-                "Unprocessable Entity",
-                ex.getMessage()
-        );
-
         return Response.status(422)
                 .type(MediaType.APPLICATION_JSON)
-                .entity(error)
+                .entity(new ErrorResponse(422, "Unprocessable Entity", ex.getMessage()))
                 .build();
     }
 }

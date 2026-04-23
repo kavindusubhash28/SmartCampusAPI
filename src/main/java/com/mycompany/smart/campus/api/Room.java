@@ -16,7 +16,6 @@ public class Room {
         this.id = id;
         this.name = name;
         this.capacity = capacity;
-        this.sensorIds = new ArrayList<>();
     }
 
     public String getId() {

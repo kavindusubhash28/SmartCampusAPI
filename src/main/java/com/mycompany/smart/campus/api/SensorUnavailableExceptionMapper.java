@@ -10,15 +10,9 @@ public class SensorUnavailableExceptionMapper implements ExceptionMapper<SensorU
 
     @Override
     public Response toResponse(SensorUnavailableException ex) {
-        ErrorResponse error = new ErrorResponse(
-                403,
-                "Forbidden",
-                ex.getMessage()
-        );
-
         return Response.status(Response.Status.FORBIDDEN)
                 .type(MediaType.APPLICATION_JSON)
-                .entity(error)
+                .entity(new ErrorResponse(403, "Forbidden", ex.getMessage()))
                 .build();
     }
 }

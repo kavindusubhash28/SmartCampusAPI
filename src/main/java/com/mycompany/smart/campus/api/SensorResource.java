@@ -39,25 +39,25 @@ public class SensorResource {
     public Response createSensor(Sensor sensor) {
         if (sensor == null || sensor.getId() == null || sensor.getId().isBlank()) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("Sensor id is required")
+                    .entity(new ErrorResponse(400, "Bad Request", "Sensor id is required"))
                     .build();
         }
 
         if (DataStore.sensors.containsKey(sensor.getId())) {
             return Response.status(Response.Status.CONFLICT)
-                    .entity("Sensor with this id already exists")
+                    .entity(new ErrorResponse(409, "Conflict", "Sensor with this id already exists"))
                     .build();
         }
 
         if (sensor.getRoomId() == null || sensor.getRoomId().isBlank()) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity("roomId is required")
+                    .entity(new ErrorResponse(400, "Bad Request", "roomId is required"))
                     .build();
         }
 
         Room room = DataStore.rooms.get(sensor.getRoomId());
         if (room == null) {
-             throw new LinkedResourceNotFoundException("Cannot create sensor because the referenced room does not exist.");
+            throw new LinkedResourceNotFoundException("Cannot create sensor because the referenced room does not exist.");
         }
 
         if (sensor.getStatus() == null || sensor.getStatus().isBlank()) {

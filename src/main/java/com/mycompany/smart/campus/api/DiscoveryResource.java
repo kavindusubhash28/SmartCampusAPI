@@ -8,15 +8,15 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Path("")
+@Produces(MediaType.APPLICATION_JSON)
 public class DiscoveryResource {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Map<String, Object> getApiInfo() {
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("name", "Smart Campus API");
         response.put("version", "v1");
-        response.put("contact", "your-email@example.com");
+        response.put("contact", "w2120233@westminster.ac.uk");
 
         Map<String, String> resources = new LinkedHashMap<>();
         resources.put("rooms", "/api/v1/rooms");

@@ -10,15 +10,15 @@ public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
     public Response toResponse(Throwable ex) {
-        ErrorResponse error = new ErrorResponse(
-                500,
-                "Internal Server Error",
-                "An unexpected error occurred. Please contact the administrator."
-        );
+        ex.printStackTrace();
 
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .type(MediaType.APPLICATION_JSON)
-                .entity(error)
+                .entity(new ErrorResponse(
+                        500,
+                        "Internal Server Error",
+                        "An unexpected error occurred. Please contact the administrator."
+                ))
                 .build();
     }
 }
