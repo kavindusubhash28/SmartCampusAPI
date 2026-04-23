@@ -1,221 +1,137 @@
 #  Smart Campus Sensor & Room Management API
 
-##  Module
-**5COSC022W – Client-Server Architectures**
+**Module:** 5COSC022W – Client-Server Architectures  
+**Student:** Kavindu Subhash  
+**ID:** 20232223  
 
 ---
 
-##  Project Description
+##  API Overview
 
-This project is a RESTful API developed using **Jakarta EE (JAX-RS)** and deployed on **Apache Tomcat**.
+This project is a RESTful API developed using **JAX-RS (Jakarta EE)** and deployed on **Apache Tomcat 9**.
 
-The API simulates a Smart Campus system where:
+It simulates a Smart Campus system where:
 
-- Rooms can be created, retrieved, and deleted  
-- Sensors can be assigned to rooms  
-- Sensor readings can be recorded and accessed  
-- Relationships between resources are maintained  
+- Rooms can be managed  
+- Sensors are assigned to rooms  
+- Sensor readings are recorded and retrieved  
 
-The system uses **in-memory storage (HashMap)** and demonstrates core REST concepts including:
+The system uses **in-memory storage (ConcurrentHashMap)** and demonstrates:
 
-- Resource-based design  
+- RESTful design  
 - Sub-resources  
-- Filtering with query parameters  
+- Query filtering  
 - Exception handling  
 - Logging using filters  
 
 ---
 
-##  Technologies Used
+##  Resource Structure
 
-- Java (JDK 17 / 21)  
-- Jakarta EE (JAX-RS)  
-- Apache Tomcat 9  
-- Maven  
-- NetBeans IDE  
-- Postman (for testing)  
+
+/api/v1
+├── /rooms
+│ └── /{roomId}
+├── /sensors
+│ └── /{sensorId}
+│ └── /readings
+
 
 ---
 
-##  How to Run the Project
+##  How to Build & Run
 
 ### Prerequisites
-- JDK installed  
-- Apache Tomcat configured in NetBeans  
-- NetBeans IDE  
+- JDK 17 or 21  
+- Apache Tomcat 9  
+- NetBeans (recommended)  
 
-### Steps
+### Steps (NetBeans)
 
-1. Open the project in NetBeans  
-2. Ensure Apache Tomcat is added (**Services → Servers**)  
-3. Right-click project → **Run**
-
-### API Base URL
-
-
+1. Clone repository:
+   ```bash
+   git clone https://github.com/<your-username>/smart-campus-api.git
+Open project in NetBeans
+Configure Tomcat:
+Services → Servers → Add Server → Apache Tomcat
+Right-click project → Run
+Base URL
 http://localhost:8080/smart-campus-api/api/v1/
+ Sample curl Commands
+# 1. API discovery
+curl -X GET http://localhost:8080/smart-campus-api/api/v1/
 
+# 2. Create room
+curl -X POST http://localhost:8080/smart-campus-api/api/v1/rooms \
+-H "Content-Type: application/json" \
+-d '{"id":"LIB-301","name":"Library","capacity":50}'
 
----
+# 3. Create sensor
+curl -X POST http://localhost:8080/smart-campus-api/api/v1/sensors \
+-H "Content-Type: application/json" \
+-d '{"id":"CO2-001","type":"CO2","status":"ACTIVE","currentValue":0,"roomId":"LIB-301"}'
 
-##  API Endpoints
+# 4. Filter sensors
+curl -X GET "http://localhost:8080/smart-campus-api/api/v1/sensors?type=CO2"
 
-###  Discovery
+# 5. Add reading
+curl -X POST http://localhost:8080/smart-campus-api/api/v1/sensors/CO2-001/readings \
+-H "Content-Type: application/json" \
+-d '{"value":412.5}'
+ Features
+RESTful API using JAX-RS
+In-memory data storage
+Sub-resource for sensor readings
+Query parameter filtering
+Custom exception handling
+Logging filter
+ Coursework Questions & Answers
+ Part 1
+Q1: JAX-RS Lifecycle
 
-GET /api/v1/
+JAX-RS uses a per-request lifecycle, meaning a new resource instance is created for each request. To persist data across requests, a shared DataStore with static ConcurrentHashMap is used. This ensures thread-safe data access.
 
+Q2: HATEOAS
 
-###  Rooms
+HATEOAS allows the API to provide links to related resources. This makes the API self-discoverable and reduces dependency on external documentation.
 
-GET /api/v1/rooms
-POST /api/v1/rooms
-GET /api/v1/rooms/{roomId}
-DELETE /api/v1/rooms/{roomId}
+ Part 2
+Q3: IDs vs Full Objects
 
+Returning full objects increases response size but reduces the number of requests. It is more efficient for clients that need complete data.
 
-###  Sensors
+Q4: DELETE Idempotency
 
-GET /api/v1/sensors
-POST /api/v1/sensors
-GET /api/v1/sensors?type={type}
+DELETE is idempotent because repeating the request results in the same final state — the resource remains deleted.
 
+ Part 3
+Q5: @Consumes JSON
 
-###  Sensor Readings (Sub-resource)
+If a client sends an unsupported format, the server returns 415 Unsupported Media Type automatically.
 
-GET /api/v1/sensors/{sensorId}/readings
-POST /api/v1/sensors/{sensorId}/readings
+Q6: QueryParam vs Path
 
+Query parameters are better for filtering because they are optional and flexible, e.g. /sensors?type=CO2.
 
----
+ Part 4
+Q7: Sub-resource Locator
 
-##  Testing Instructions
+Sub-resources improve code organisation by separating logic into different classes, making the system easier to maintain and scale.
 
-Testing was performed using **Postman**.
+ Part 5
+Q8: 422 vs 404
 
-### Example Tests
+422 is used when the request is valid but contains incorrect data. 404 is used when the URL itself is not found.
 
-- Create Room → `POST /rooms`  
-- Get Rooms → `GET /rooms`  
-- Create Sensor → `POST /sensors`  
-- Filter Sensors → `GET /sensors?type=Temperature`  
-- Add Reading → `POST /sensors/{id}/readings`  
-- Get Readings → `GET /sensors/{id}/readings`  
+Q9: Security Risks of Stack Traces
 
----
+Stack traces expose internal system details. A global exception mapper hides these details and returns safe error messages.
 
-###  Error Handling Tests
+Q10: Logging Filters
 
-- Delete room with sensors → **409 Conflict**  
-- Create sensor with invalid room → **422 Unprocessable Entity**  
-- Add reading to maintenance sensor → **403 Forbidden**  
+Filters centralise logging logic, ensuring consistency and avoiding repetition across resource methods.
 
----
+ Author
 
-###  Logging
-
-All requests and responses are logged using a **JAX-RS filter**, including:
-
-- HTTP method  
-- URL  
-- Response status  
-
----
-
-##  Features Implemented
-
-- RESTful API using JAX-RS  
-- In-memory data storage using HashMap  
-- Sub-resource locator pattern  
-- Query parameter filtering  
-- Custom exception handling  
-- Exception mappers for HTTP responses  
-- Logging filter for request tracking  
-
----
-
-#  Coursework Questions & Answers
-
----
-
-##  Part 1
-
-### Q1: JAX-RS Lifecycle
-
-By default, JAX-RS creates a new instance of a resource class for each incoming request (per-request lifecycle). This ensures that instance variables are not shared between threads, avoiding concurrency issues. However, it also means that data stored inside resource classes is not persistent across requests. To solve this, a separate `DataStore` class with static maps is used, ensuring data persists and is shared safely across requests.
-
----
-
-### Q2: HATEOAS
-
-HATEOAS allows API responses to include links to related resources, making the API self-discoverable. In this project, the discovery endpoint provides links to `/rooms` and `/sensors`. This reduces dependency on external documentation and allows clients to dynamically navigate the API even if endpoints change.
-
----
-
-##  Part 2
-
-### Q3: IDs vs Full Objects
-
-Returning only IDs reduces response size and bandwidth usage but requires additional requests to fetch full data. Returning full objects increases payload size but provides all necessary information in one request, improving client efficiency. In this system, full objects are preferred for usability.
-
----
-
-### Q4: DELETE Idempotency
-
-DELETE is idempotent because repeated requests produce the same final state. The first DELETE removes the resource, and subsequent requests return 404, but the resource remains deleted. Therefore, the system state does not change after the first request.
-
----
-
-##  Part 3
-
-### Q5: @Consumes JSON
-
-If a client sends data in a format other than JSON (e.g., text/plain), JAX-RS automatically returns **415 Unsupported Media Type**. The request is rejected before reaching the resource method, ensuring only valid formats are processed.
-
----
-
-### Q6: QueryParam vs Path
-
-Query parameters are ideal for filtering because they are optional and do not change the identity of the resource. Using `/sensors?type=CO2` is cleaner and more flexible than embedding filters in the path. It also allows easy extension for multiple filters.
-
----
-
-##  Part 4
-
-### Q7: Sub-resource Locator
-
-The sub-resource locator pattern separates logic into different classes. Instead of handling everything in one large class, `SensorResource` delegates reading-related operations to `SensorReadingResource`. This improves code organization, readability, and scalability.
-
----
-
-##  Part 5
-
-### Q8: 422 vs 404
-
-HTTP 422 is more appropriate when the request is syntactically correct but contains invalid data (e.g., referencing a non-existent room). A 404 indicates a missing URL, not invalid request content.
-
----
-
-### Q9: Security Risks of Stack Traces
-
-Exposing stack traces can reveal internal structure, class names, file paths, and library versions. This information can be used by attackers to exploit vulnerabilities. Therefore, a `GlobalExceptionMapper` is used to return safe error messages while logging details internally.
-
----
-
-### Q10: Logging Filters
-
-Using a logging filter centralizes logging logic and avoids repetition across resource methods. It ensures consistent logging for all requests and simplifies maintenance compared to manually adding logging statements in each method.
-
----
-
-##  Author
-
-**Kavindu Subhash**  
-Student ID: 20232223 
-
----
-
-##  Final Notes
-
-- This project follows RESTful design principles  
-- All endpoints are tested and functional  
-- The API is deployed using Apache Tomcat  
+Kavindu Subhash
+Student ID: 20232223
