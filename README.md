@@ -80,7 +80,7 @@ This API is a RESTful web service built with **JAX-RS (Jakarta EE)** and deploye
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<your-username>/smart-campus-api.git
+   git clone https://github.com/kavindusubhash28/SmartCampusAPI.git
    ```
 
 2. Open **NetBeans IDE** → `File` → `Open Project` → select the `smart-campus-api` folder
@@ -100,7 +100,7 @@ This API is a RESTful web service built with **JAX-RS (Jakarta EE)** and deploye
 
 1. Clone the repository:
    ```bash
-   git clone https: https://github.com/kavindusubhash28/SmartCampusAPI.git)
+   git clone https: https://github.com/kavindusubhash28/SmartCampusAPI.git
    ```
 
 2. Build the WAR file:
@@ -196,7 +196,7 @@ curl -X GET http://localhost:8080/smart-campus-api/api/v1/rooms/LIB-301 \
 
 ---
 
-## 📘 Coursework Questions & Answers
+##  Coursework Questions & Answers
 
 ---
 
