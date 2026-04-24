@@ -100,8 +100,7 @@ This API is a RESTful web service built with **JAX-RS (Jakarta EE)** and deploye
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<your-username>/smart-campus-api.git
-   cd smart-campus-api
+   git clone https: https://github.com/kavindusubhash28/SmartCampusAPI.git)
    ```
 
 2. Build the WAR file:
